@@ -1,0 +1,43 @@
+MY_KEYDOWN_FNC = {
+    params ["_display", "_key", "_shift", "_ctrl", "_alt"];
+
+    if (_key isEqualTo 59) then { 
+		_rubberDuckFound = false; 
+		if ((ExileClientPlayerAttributes select 0) > 98) then{
+			["SuccessTitleAndText", [ "Ты здоров!"]] call ExileClient_gui_toaster_addTemplateToast;
+			}else{
+		
+				_item="Exile_Item_InstaDoc";
+				if (_item in (uniformItems player)) then {
+					_rubberDuckFound = true;
+					player removeItem _item;
+				};
+			
+				if ( _rubberDuckFound == false && _item in (vestItems player)) then {
+					_rubberDuckFound = true;
+					player removeItemFromVest _item;
+				};
+				
+				if ( _rubberDuckFound == false && _item in (backpackItems player)) then {
+					_rubberDuckFound = true;
+					player removeItemFromBackpack _item;
+				};
+				
+				if (_rubberDuckFound) then {
+					["SuccessTitleAndText", [ "Ты уколол себя шприцом, медленно ты лечишься."]] call ExileClient_gui_toaster_addTemplateToast;
+					player setAnimSpeedCoef 1;
+					player setStamina 402;
+					while { (damage player) > 0 } do {
+						player setDamage ((damage player) - 0.01);
+						uisleep 1;
+					};
+				} else {
+					["SuccessTitleAndText", [ "У тебя нет InstaDoc"]] call ExileClient_gui_toaster_addTemplateToast;
+				};
+		};
+				
+				
+			};
+};
+
+jumpDisplayHandle = (findDisplay 46) displayAddEventHandler ["KeyDown", "_this call MY_KEYDOWN_FNC"];
