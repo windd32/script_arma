@@ -1,0 +1,90 @@
+private ["_rubberDuckFound","_item" ,"_winningCombinations" ];
+_winningCombinations = [
+    ["111", 10],
+    ["222", 10],
+    ["333", 15],
+    ["444", 14],
+    ["555", 40],
+    ["666", 6],
+    ["777", 50],
+    ["888", 18],
+    ["999", 19],
+    ["11x", 1],
+    ["22x", 1],
+    ["33x", 1],
+    ["44x", 1],
+    ["55x", 1],
+    ["66x", 1],
+    ["77x", 1],
+    ["88x", 1],
+    ["99x", 1],
+    ["x11", 1],
+    ["x22", 1],
+    ["x33", 1],
+    ["x44", 1],
+    ["x55", 1],
+    ["x66", 1],
+    ["x77", 1],
+    ["x88", 1],
+    ["11x", 1],
+    ["22x", 1],
+    ["33x", 1],
+    ["44x", 1],
+    ["55x", 1],
+    ["66x", 1],
+    ["77x", 1],
+    ["88x", 1],
+    ["99x", 1],
+    ["x11", 1],
+    ["x22", 1],
+    ["x33", 1],
+    ["x44", 1],
+    ["x55", 1],
+    ["x66", 1],
+    ["x77", 1],
+    ["x88", 1],
+    ["x99", 1]
+];
+
+
+_rubberDuckFound = false; 
+_item="Exile_Item_RubberDuck";
+if (_item in (uniformItems player)) then {
+	_rubberDuckFound = true;
+	player removeItem _item;
+};
+
+
+if ( _rubberDuckFound == false && _item in (vestItems player)) then {
+	_rubberDuckFound = true;
+	player removeItemFromVest _item;
+};
+
+if ( _rubberDuckFound == false && _item in (backpackItems player)) then {
+	_rubberDuckFound = true;
+	player removeItemFromBackpack _item;
+};
+
+
+if (_rubberDuckFound) then {
+	
+	_randomNumber = floor(random 10) + 1;
+	if (_randomNumber >= 1 && _randomNumber <= 4) then {
+		["SuccessTitleAndText", [ str( _randomNumber  )]] call ExileClient_gui_toaster_addTemplateToast;
+		_arrayLength = count _winningCombinations;
+		_randomIndex = floor(random _arrayLength);
+		_randomElement = _winningCombinations select _randomIndex;
+		_firstElement = _randomElement select 0;
+		_secondElement = _randomElement select 1;
+		_text = format["Комбинация: %1, Ваш приз: %2", _firstElement, _secondElement];
+		["SuccessTitleAndText", [  str( _text ) ]] call ExileClient_gui_toaster_addTemplateToast;
+		dobr_slot_box addItemCargoGlobal  [ "CUP_item_Money" , _secondElement] ;
+		
+	} else {
+	["SuccessTitleAndText", [ "Неудача - без приза! Попробуйте еще раз, вам обязательно повезет!"  ]] call ExileClient_gui_toaster_addTemplateToast;
+	};
+		
+
+} else {
+	["SuccessTitleAndText", [ "Уточки не нашлось в инвентаре!"]] call ExileClient_gui_toaster_addTemplateToast;
+};
