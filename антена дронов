@@ -34,10 +34,10 @@ if (_rubberDuckFound) then {
 			_randomNumber = floor(random 100) + 1;
 			
 			if (_randomNumber <= 5) then {
-				["SuccessTitleAndText", [ "При сборке антена повреждена"]] call ExileClient_gui_toaster_addTemplateToast;
+				["SuccessTitleAndText", [ "При сборке антенна повреждена"]] call ExileClient_gui_toaster_addTemplateToast;
 				_groundWeaponHolder addMagazineCargoGlobal ["Exile_Item_JunkMetal", 3];
 			} else {
-				["SuccessTitleAndText", [ "Антена собрана"]] call ExileClient_gui_toaster_addTemplateToast;
+				["SuccessTitleAndText", [ "Антенна собрана"]] call ExileClient_gui_toaster_addTemplateToast;
 				_groundWeaponHolder addMagazineCargoGlobal ["Land_SatelliteAntenna_01_F_Kit", 1];
 			};
 		}
@@ -46,5 +46,5 @@ if (_rubberDuckFound) then {
 	
 
 } else {
-	["SuccessTitleAndText", [ "Ошибка, купи антену!"]] call ExileClient_gui_toaster_addTemplateToast;
+	["SuccessTitleAndText", [ "Ошибка, купи антенну!"]] call ExileClient_gui_toaster_addTemplateToast;
 };
