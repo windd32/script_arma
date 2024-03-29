@@ -1,0 +1,50 @@
+
+_rubberDuckFound = false; 
+_item="Land_SatelliteAntenna_01_F_Kit";
+if (_item in (uniformItems player)) then {
+	_rubberDuckFound = true;
+	player removeItem _item;
+};
+
+if ( _rubberDuckFound == false && _item in (vestItems player)) then {
+	_rubberDuckFound = true;
+	player removeItemFromVest _item;
+};
+
+if ( _rubberDuckFound == false && _item in (backpackItems player)) then {
+	_rubberDuckFound = true;
+	player removeItemFromBackpack _item;
+};
+
+if (_rubberDuckFound) then {
+	
+	_distance = 1;
+	_playerPos = getPos player;
+	_playerDir = getDir player;
+	_newPos = _playerPos vectorAdd [_distance * sin _playerDir, _distance * cos _playerDir, 0];
+    _car = createVehicle ["FPV_Retranslator", _newPos, [], 0, ""];	
+	_car addAction ["<t color='#00FF00'>Собрать антену</t>", 
+		{
+			params ["_target", "_caller", "_actionId", "_arguments"];
+			_playerPos = getPos _target;
+			_offset = [1, 0, 0]; 
+			_spawnPos = _playerPos vectorAdd _offset;
+			deleteVehicle _target;
+			_groundWeaponHolder = createVehicle ["GroundWeaponHolder", _spawnPos, [], 0, "CAN_COLLIDE"];
+			_randomNumber = floor(random 100) + 1;
+			
+			if (_randomNumber <= 5) then {
+				["SuccessTitleAndText", [ "При сборке антена повреждена"]] call ExileClient_gui_toaster_addTemplateToast;
+				_groundWeaponHolder addMagazineCargoGlobal ["Exile_Item_JunkMetal", 3];
+			} else {
+				["SuccessTitleAndText", [ "Антена собрана"]] call ExileClient_gui_toaster_addTemplateToast;
+				_groundWeaponHolder addMagazineCargoGlobal ["Land_SatelliteAntenna_01_F_Kit", 1];
+			};
+		}
+	];	
+	["SuccessTitleAndText", [ "Антенна собрана, не забудьте собрать ее после завершения операции"]] call ExileClient_gui_toaster_addTemplateToast;
+	
+
+} else {
+	["SuccessTitleAndText", [ "Ошибка, купи антену!"]] call ExileClient_gui_toaster_addTemplateToast;
+};
