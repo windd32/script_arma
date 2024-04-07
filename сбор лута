@@ -1,0 +1,73 @@
+_box = cursorTarget;
+clearItemCargoGlobal _box;
+clearMagazineCargoGlobal _box;
+clearWeaponCargoGlobal _box;
+clearBackpackCargoGlobal _box;
+private _radius = 150;
+_objects = nearestObjects [getPos _box, [], _radius];
+
+{
+    if (_x isKindOf "Man" && !alive _x) then {
+
+        _weapons = weapons _x;
+        { 
+            _box addWeaponCargoGlobal [_x, 1];
+        } forEach _weapons;
+        
+        _items = items _x;
+        {
+            _box addItemCargoGlobal [_x, 1];
+        } forEach _items;
+        
+        _magazines = magazines _x;
+        {
+            _box addMagazineCargoGlobal [_x, 1];
+        } forEach _magazines;
+        removeAllWeapons _x;
+        removeAllItems _x;
+        removeAllAssignedItems _x;
+		
+		
+		if (uniform _x != "") then {
+            _uniform = uniform _x;
+            _box addItemCargoGlobal [_uniform, 1];
+            removeUniform _x;
+        };
+        
+        if (vest _x != "") then {
+            _vest = vest _x;
+            _box addItemCargoGlobal [_vest, 1];
+            removeVest _x;
+        };
+        
+        if (headgear _x != "") then {
+            _vest = headgear _x;
+            _box addItemCargoGlobal [_vest, 1];
+            removeVest _x;
+        };	
+		
+        if (	backpack _x != "") then {
+			clearAllItemsFromBackpack _x;
+            _backpack = backpack _x;
+            _box addBackpackCargoGlobal [_backpack, 1];
+            removeBackpackGlobal _x;
+        };
+		
+		deleteVehicle _x; 
+    };
+} forEach _objects;
+
+
+_box = cursorTarget;
+private _radius = 150; 
+_objects = nearestObjects [getPos _box, [], _radius];
+
+{
+    if (_x isKindOf "WeaponHolderSimulated") then { 
+        _item = weaponCargo _x; 
+        {
+            _box addItemCargoGlobal [_x, 1]; 
+        } forEach _item;
+        deleteVehicle _x; 
+    };
+} forEach _objects;
